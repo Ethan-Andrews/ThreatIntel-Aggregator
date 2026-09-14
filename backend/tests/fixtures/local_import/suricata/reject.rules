@@ -1,0 +1,1 @@
+reject tcp any any -> $HOME_NET 23 (msg:"Reject inbound telnet"; sid:1000004; rev:1;)

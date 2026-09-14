@@ -1,0 +1,7 @@
+// Proves strip_comments()/detect_language() don't misclassify based on
+// literal contents -- the string literal below contains text shaped like
+// both a Sigma rule (logsource:/detection:) and a YARA rule declaration,
+// but this file is still genuinely KQL and must classify as such.
+DeviceProcessEvents
+| where ProcessCommandLine has "logsource:\n  category: process_creation\ndetection:\n  selection:\n    a: b\nrule EvilRule { condition: true }"
+| project DeviceName, ProcessCommandLine

@@ -1,0 +1,36 @@
+# Pinned 2026-09-01 — update by running: pip install pip-tools && pip-compile --generate-hashes requirements.in
+fastapi==0.141.1
+uvicorn==0.52.4
+feedparser==6.0.14
+# APScheduler: pinned to stable 3.x — 4.x is still alpha and has breaking API changes
+apscheduler==3.11.3
+httpx==0.28.1
+python-dotenv==1.2.3
+# anthropic>=1.0's HTTP layer moved from httpx to its maintained fork httpx2 --
+# only matters where an httpx object crosses the SDK boundary (see
+# feed_manager.py's Azure-provider http_client= construction). httpx2 arrives
+# transitively with anthropic but is declared directly since feed_manager.py
+# imports it explicitly.
+anthropic==1.2.0
+httpx2==2.12.0
+# openai removed — package is not imported anywhere in the codebase
+python-jose[cryptography]==3.5.0
+# python-jose 3.4.0 pinned pyasn1<0.5.0, which excludes pyasn1's own security
+# fixes (PYSEC-2026-2263/3455/3456/3457) -- 3.5.0 relaxes that to pyasn1>=0.5.0.
+# Pinned explicitly here (not left as a transitive resolve) so the fix sticks.
+pyasn1==0.6.4
+ioc-finder==9.4.1
+stix2==3.0.2
+markupsafe==3.0.3
+slowapi==0.1.10
+# azure-storage-blob removed: SQLite blob persistence retired with the Postgres migration
+psycopg[binary]==3.3.5
+psycopg-pool==3.3.1
+# Required for SentinelClient's DefaultAzureCredential (detection_pipeline/sentinel.py) --
+# without it every Sentinel-backed stage (control probe, backtest, tune, and the three
+# orchestrator.run() sweeps) silently no-ops. See CLAUDE.md/sdlc skill Gotchas.
+azure-identity==1.25.3
+# Sigma rule detection in static_gate.py's detect_language() parses the
+# candidate body for real (yaml.safe_load_all only, never yaml.load) rather
+# than regex-matching against raw text.
+PyYAML==6.0.2

@@ -1,0 +1,3 @@
+DeviceProcessEvents
+| where ProcessCommandLine has "test"
+| project DeviceName| where true

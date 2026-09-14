@@ -1,0 +1,6 @@
+{
+  "file": "multi_stage_lateral_movement.kql",
+  "title": "Multi-Stage Lateral Movement via Remote Service Creation",
+  "description": "Correlates a remote service installation with a network connection to another internal host from the same device shortly afterward, a common shape for PsExec-style lateral movement.",
+  "technique_id": "T1021"
+}

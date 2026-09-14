@@ -1,0 +1,16 @@
+{
+    "kind": "Scheduled",
+    "properties": {
+        "displayName": "Exported PowerShell Encoded Command Rule",
+        "description": "Native ARM export of a Scheduled analytics rule from a real tenant.",
+        "severity": "High",
+        "enabled": true,
+        "query": "DeviceProcessEvents | where ProcessCommandLine has \"-EncodedCommand\"",
+        "queryFrequency": "PT1H",
+        "queryPeriod": "PT1H",
+        "triggerOperator": "GreaterThan",
+        "triggerThreshold": 0,
+        "tactics": ["Execution", "DefenseEvasion"],
+        "techniques": ["T1059.001"]
+    }
+}

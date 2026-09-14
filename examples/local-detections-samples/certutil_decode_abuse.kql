@@ -1,0 +1,11 @@
+// Detects certutil being invoked with -decode against a file, a common
+// LOLBin technique for staging a payload without downloading an
+// executable directly. No sidecar needed -- title/description are
+// derived from the filename and this comment when no metadata is
+// declared separately.
+DeviceProcessEvents
+| where FileName =~ "certutil.exe"
+| where ProcessCommandLine has "-decode"
+| where ProcessCommandLine has_any (".txt", ".log", ".dat", ".tmp")
+| project TimeGenerated, DeviceName, AccountName, ProcessCommandLine, InitiatingProcessFileName
+| order by TimeGenerated desc

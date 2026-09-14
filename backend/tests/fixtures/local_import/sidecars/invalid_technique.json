@@ -1,0 +1,5 @@
+{
+    "file": "invalid_technique_content.kql",
+    "title": "Rule with a malformed technique id",
+    "technique_id": "not-a-real-technique-id"
+}

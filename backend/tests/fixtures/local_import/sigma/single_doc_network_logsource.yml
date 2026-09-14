@@ -1,0 +1,15 @@
+title: Suspicious Outbound Connection to Known C2 Port
+id: 5b0dcb0c-4bfa-4e35-8b6c-000000000002
+status: experimental
+logsource:
+    category: network_connection
+    product: windows
+    service: sysmon
+detection:
+    selection:
+        DestinationPort:
+            - 4444
+            - 8443
+        Initiated: 'true'
+    condition: selection
+level: medium

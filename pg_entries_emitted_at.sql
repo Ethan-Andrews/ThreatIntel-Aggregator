@@ -1,0 +1,22 @@
+-- Adds entries.emitted_at, which outbox.py has assumed exists since it was
+-- written: GATE_SQL filters on "e.emitted_at IS NULL", mark_emitted() sets
+-- it, replay() clears it, and the module's own docstring documents the
+-- crash-safety property ("a run that dies mid-flight leaves its rows
+-- unclaimed for the next run to pick up, because emitted_at is only set on
+-- success") as if the column were already there. It never was: no pg_*.sql
+-- file ever created it, in this repo's history or in prod. Discovered
+-- 2026-08-31 -- every orchestrator.process_one() success/skip/give-up path
+-- raised UndefinedColumn on outbox.mark_emitted(), confirmed pre-existing
+-- and unrelated to that session's own changes (reproduced identically on a
+-- clean checkout via git stash).
+--
+-- TEXT, not a native timestamp, matching every other "_at" column in
+-- pg_schema.sql (ingested, archived_at, etc.) -- all set via
+-- to_char(now() AT TIME ZONE 'utc', 'YYYY-MM-DD HH24:MI:SS'), never a
+-- native Postgres timestamp type, for consistency with the rest of the
+-- schema.
+--
+-- The app user (tiapp) is DML only, so this runs as pgadmin. Idempotent:
+-- safe to re-run.
+
+ALTER TABLE entries ADD COLUMN IF NOT EXISTS emitted_at TEXT DEFAULT NULL;

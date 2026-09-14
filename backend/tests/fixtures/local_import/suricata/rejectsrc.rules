@@ -1,0 +1,1 @@
+rejectsrc tcp any any -> $HOME_NET 80 (msg:"Reject and notify source on inbound HTTP"; sid:1000005; rev:1;)

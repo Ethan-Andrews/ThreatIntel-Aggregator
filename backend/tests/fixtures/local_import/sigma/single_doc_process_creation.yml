@@ -1,0 +1,12 @@
+title: Suspicious PowerShell EncodedCommand Usage
+id: 5b0dcb0c-4bfa-4e35-8b6c-000000000001
+status: experimental
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection:
+        Image|endswith: '\powershell.exe'
+        CommandLine|contains: '-enc'
+    condition: selection
+level: high

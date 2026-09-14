@@ -1,0 +1,1 @@
+alert tcp any any -> any 445 (msg:"Possible SMB exploit attempt"; flow:to_server; sid:1000001; rev:1;)

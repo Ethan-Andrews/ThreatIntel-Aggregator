@@ -1,0 +1,8 @@
+{
+    "kind": "Fusion",
+    "properties": {
+        "displayName": "Advanced Multistage Attack Detection",
+        "enabled": true,
+        "alertRuleTemplateName": "f71aba3d-28fb-450b-b192-4e76a83015c8"
+    }
+}

@@ -1,0 +1,84 @@
+{
+    "type": "bundle",
+    "id": "bundle--test-fixture",
+    "x_mitre_version": "18.0-test",
+    "objects": [
+        {
+            "type": "attack-pattern",
+            "id": "attack-pattern--fixture-1",
+            "name": "Scheduled Task",
+            "external_references": [
+                {"source_name": "mitre-attack", "external_id": "T1053.005", "url": "https://attack.mitre.org/techniques/T1053/005"}
+            ]
+        },
+        {
+            "type": "x-mitre-detection-strategy",
+            "id": "x-mitre-detection-strategy--fixture-1",
+            "name": "Detect Scheduled Task Creation",
+            "description": "Monitor for scheduled task creation via schtasks.exe, the Task Scheduler API, or crontab modification.",
+            "external_references": [
+                {"source_name": "mitre-attack", "external_id": "DET0210"}
+            ],
+            "x_mitre_analytic_refs": ["x-mitre-analytic--fixture-1", "x-mitre-analytic--fixture-2"]
+        },
+        {
+            "type": "x-mitre-analytic",
+            "id": "x-mitre-analytic--fixture-1",
+            "name": "Scheduled Task Creation via schtasks.exe",
+            "description": "Detects process creation events for schtasks.exe with /create.",
+            "x_mitre_platforms": ["Windows"],
+            "x_mitre_log_source_references": [
+                {"x_mitre_data_component_ref": "x-mitre-data-component--fixture-1", "name": "sysmon", "channel": "1"}
+            ],
+            "x_mitre_mutable_elements": [
+                {"field": "process_command_line", "description": "Narrow by expected task names in high-volume environments."}
+            ]
+        },
+        {
+            "type": "x-mitre-analytic",
+            "id": "x-mitre-analytic--fixture-2",
+            "name": "Scheduled Task Creation via crontab (Linux)",
+            "description": "Detects crontab modification consistent with scheduled task creation.",
+            "x_mitre_platforms": ["Linux"],
+            "x_mitre_log_source_references": [
+                {"x_mitre_data_component_ref": "x-mitre-data-component--fixture-2", "name": "auditd", "channel": "SYSCALL"}
+            ],
+            "x_mitre_mutable_elements": []
+        },
+        {
+            "type": "x-mitre-data-component",
+            "id": "x-mitre-data-component--fixture-1",
+            "name": "Process Creation",
+            "description": "Monitoring for newly executed processes.",
+            "x_mitre_log_sources": [
+                {"name": "sysmon", "channel": "1"}
+            ]
+        },
+        {
+            "type": "x-mitre-data-component",
+            "id": "x-mitre-data-component--fixture-2",
+            "name": "Command Execution",
+            "description": "Monitoring for command execution.",
+            "x_mitre_log_sources": [
+                {"name": "auditd", "channel": "SYSCALL"}
+            ]
+        },
+        {
+            "type": "relationship",
+            "id": "relationship--fixture-1",
+            "relationship_type": "detects",
+            "source_ref": "x-mitre-detection-strategy--fixture-1",
+            "target_ref": "attack-pattern--fixture-1"
+        },
+        {
+            "type": "x-mitre-detection-strategy",
+            "id": "x-mitre-detection-strategy--fixture-orphan",
+            "name": "Orphan Strategy With No Detects Relationship",
+            "description": "A detection strategy that is not linked to any technique via a 'detects' relationship -- exercises the safe-decline path in parse_bundle().",
+            "external_references": [
+                {"source_name": "mitre-attack", "external_id": "DET9999"}
+            ],
+            "x_mitre_analytic_refs": []
+        }
+    ]
+}

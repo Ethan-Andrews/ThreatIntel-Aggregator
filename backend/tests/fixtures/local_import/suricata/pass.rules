@@ -1,0 +1,1 @@
+pass tcp $HOME_NET any -> $HOME_NET 22 (msg:"Allow internal SSH"; sid:1000003; rev:1;)

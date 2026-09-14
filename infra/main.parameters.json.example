@@ -1,0 +1,44 @@
+{
+    "location": {
+        "value": "centralus"
+    },
+    "environment": {
+        "value": "prod"
+    },
+    "projectName": {
+        "value": "ti-rss-feed"
+    },
+    "acrSku": {
+        "value": "Basic"
+    },
+    "storageShareName": {
+        "value": "ti-data"
+    },
+    "azureFoundryEndpoint": {
+        "value": "https://<resource>.services.ai.azure.com/anthropic"
+    },
+    "azureFoundryDeployment": {
+        "value": "claude-haiku-4-5"
+    },
+    "azureFoundryApiVersion": {
+        "value": "2025-05-01"
+    },
+    "nextAuthSecret": {
+        "value": "<generate with: python -c \"import secrets; print(secrets.token_urlsafe(32))\">"
+    },
+    "azureAdClientId": {
+        "value": "<from Entra ID app registration>"
+    },
+    "azureAdClientSecret": {
+        "value": "<from Entra ID app registration>"
+    },
+    "azureAdTenantId": {
+        "value": "<your-tenant-id>"
+    },
+    "apiSecretKey": {
+        "value": "<generate with: python -c \"import secrets; print(secrets.token_hex(32))\">"
+    },
+    "azureFoundryApiKey": {
+        "value": "<azure-ai-foundry-api-key>"
+    }
+}

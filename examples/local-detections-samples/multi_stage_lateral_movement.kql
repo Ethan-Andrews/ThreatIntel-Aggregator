@@ -1,0 +1,21 @@
+// Correlates a remote-service creation event with a network connection to
+// another internal host from the same device within a short window --
+// a common shape for lateral movement via PsExec-style tooling. Paired
+// with a sidecar (multi_stage_lateral_movement.json) so title/
+// description/technique_id come from that file instead of being
+// inferred.
+let window = 15m;
+let RemoteServiceEvents =
+    DeviceEvents
+    | where ActionType == "ServiceInstalled"
+    | project TimeGenerated, DeviceName, ServiceName = AdditionalFields;
+let NetworkHops =
+    DeviceNetworkEvents
+    | where RemoteIPType == "Private"
+    | where InitiatingProcessFileName in~ ("services.exe", "svchost.exe")
+    | project TimeGenerated, DeviceName, RemoteIP, RemotePort;
+RemoteServiceEvents
+| join kind=inner (NetworkHops) on DeviceName
+| where (TimeGenerated1 - TimeGenerated) between (0min .. window)
+| project DeviceName, ServiceInstallTime = TimeGenerated, NetworkHopTime = TimeGenerated1, RemoteIP, RemotePort
+| order by ServiceInstallTime desc

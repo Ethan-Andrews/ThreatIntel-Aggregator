@@ -1,0 +1,7 @@
+// A degenerate, easily-evaded detection: alerting on one exact SHA256
+// value only ever matches this one sample, never the technique itself --
+// static_gate.py's hash_predicate check rejects this shape. Used to prove
+// local import still catalogs an "improper" KQL rule rather than
+// silently dropping it, with the reason surfaced clearly.
+DeviceFileEvents
+| where SHA256 == "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"

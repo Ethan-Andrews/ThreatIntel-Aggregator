@@ -1,0 +1,10 @@
+Included on purpose: plain prose, not KQL/YARA/Suricata/Sigma/SPL or any
+recognized detection format. Local Detections Import should reject this
+one outright with a clear per-file error (rather than guessing or
+silently skipping it) -- distinct from the flagged-but-imported rule
+above, since this file was never cataloged as a detection at all.
+
+Analyst notes from the incident:
+The certutil execution was traced back to a phishing attachment opened
+around 14:32 UTC. Follow-up with the affected user confirmed they did
+not knowingly run the command; likely a macro-driven payload.

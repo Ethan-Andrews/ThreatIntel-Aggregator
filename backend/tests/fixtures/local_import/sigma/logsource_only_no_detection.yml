@@ -1,0 +1,5 @@
+title: Incomplete rule -- has logsource but no detection block
+id: 5b0dcb0c-4bfa-4e35-8b6c-000000000005
+logsource:
+    category: process_creation
+    product: windows

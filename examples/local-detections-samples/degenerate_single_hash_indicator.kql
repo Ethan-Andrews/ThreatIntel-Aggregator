@@ -1,0 +1,8 @@
+// Deliberately a bad rule: alerting on one exact SHA256 value only ever
+// matches this one sample, never the technique itself -- a single
+// changed byte defeats it entirely. Included on purpose to demonstrate
+// Local Detections Import's behavior on an "improper" rule: it still
+// gets cataloged and browsable (nothing silently disappears), but the
+// top-of-results alert flags it as invalid and explains exactly why.
+DeviceFileEvents
+| where SHA256 == "185755788d69c83979c75f27535483f3da7e9ee32b641f58cb6fccfd6bd77077"

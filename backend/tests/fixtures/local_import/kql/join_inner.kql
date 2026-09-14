@@ -1,0 +1,7 @@
+DeviceProcessEvents
+| where FileName =~ "powershell.exe"
+| join kind=inner (
+    DeviceNetworkEvents
+    | where RemotePort in (443, 8443)
+) on DeviceId
+| project DeviceName, ProcessCommandLine, RemoteIP

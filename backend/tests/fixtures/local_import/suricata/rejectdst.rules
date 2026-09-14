@@ -1,0 +1,1 @@
+rejectdst tcp any any -> $HOME_NET 8080 (msg:"Reject and notify destination on inbound proxy traffic"; sid:1000006; rev:1;)

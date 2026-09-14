@@ -1,0 +1,3 @@
+DeviceRegistryEvents
+| where RegistryKey has "CurrentVersion\\Run"
+| project DeviceName, RegistryKey, RegistryValueData

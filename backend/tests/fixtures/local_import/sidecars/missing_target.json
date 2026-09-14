@@ -1,0 +1,4 @@
+{
+    "file": "does_not_exist.kql",
+    "title": "Sidecar pointing at a missing file"
+}

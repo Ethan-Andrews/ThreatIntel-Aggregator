@@ -1,0 +1,33 @@
+name: ti-rss-feed
+metadata:
+  template: threat-intelligence-dashboard
+  description: Full-stack threat intelligence RSS feed management system with AI triage
+services:
+  backend:
+    language: py
+    host: containerapp
+    project: ./backend
+    docker:
+      path: Dockerfile
+      registry: ${AZURE_CONTAINER_REGISTRY_ENDPOINT}
+      image: ti-rss-feed-backend
+  frontend:
+    language: js
+    host: containerapp
+    project: ./frontend
+    docker:
+      path: Dockerfile
+      registry: ${AZURE_CONTAINER_REGISTRY_ENDPOINT}
+      image: ti-rss-feed-frontend
+infra:
+  path: ./infra
+  module: main
+env:
+  - name: LOCATION
+    value: centralus
+  - name: RESOURCE_GROUP_NAME
+    value: rg-ti-rss-feed
+  - name: ENVIRONMENT
+    value: prod
+  - name: PROJECT_NAME
+    value: ti-rss-feed

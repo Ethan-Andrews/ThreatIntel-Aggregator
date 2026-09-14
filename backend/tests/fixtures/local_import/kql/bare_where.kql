@@ -1,0 +1,3 @@
+DeviceProcessEvents
+| where ProcessCommandLine has "mimikatz"
+| project DeviceName, Timestamp, ProcessCommandLine

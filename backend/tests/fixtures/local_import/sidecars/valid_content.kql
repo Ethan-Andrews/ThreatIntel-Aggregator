@@ -1,0 +1,3 @@
+DeviceProcessEvents
+| where ProcessCommandLine has "certutil" and ProcessCommandLine has "-decode"
+| project DeviceName, Timestamp, ProcessCommandLine

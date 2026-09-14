@@ -1,0 +1,4 @@
+union DeviceProcessEvents, DeviceNetworkEvents
+| where Timestamp > ago(1d)
+| where DeviceName == "victim01"
+| sort by Timestamp desc

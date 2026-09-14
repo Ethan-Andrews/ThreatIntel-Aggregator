@@ -1,0 +1,4 @@
+_Im_NetworkSession
+| where SrcIpAddr == "10.0.0.5"
+| where DstPortNumber in (445, 3389)
+| project TimeGenerated, SrcIpAddr, DstIpAddr, DstPortNumber

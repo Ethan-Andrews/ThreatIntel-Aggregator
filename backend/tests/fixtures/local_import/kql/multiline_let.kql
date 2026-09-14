@@ -1,0 +1,8 @@
+// Multi-line KQL with let statements -- exercises _KQL_LET's ^\s*let\s+\w+\s*= match.
+let lookback = 7d;
+let threshold = 5;
+DeviceLogonEvents
+| where Timestamp > ago(lookback)
+| where FailureReason != ""
+| summarize FailCount = count() by DeviceName, AccountName
+| where FailCount > threshold

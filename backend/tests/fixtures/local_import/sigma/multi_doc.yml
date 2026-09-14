@@ -1,0 +1,22 @@
+title: Rule A - Suspicious Scheduled Task Creation
+id: 5b0dcb0c-4bfa-4e35-8b6c-000000000003
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection:
+        Image|endswith: '\schtasks.exe'
+        CommandLine|contains: '/create'
+    condition: selection
+level: medium
+---
+title: Rule B - Suspicious Registry Run Key Modification
+id: 5b0dcb0c-4bfa-4e35-8b6c-000000000004
+logsource:
+    category: registry_set
+    product: windows
+detection:
+    selection:
+        TargetObject|contains: '\CurrentVersion\Run'
+    condition: selection
+level: medium

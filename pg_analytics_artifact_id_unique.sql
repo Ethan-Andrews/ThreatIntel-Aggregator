@@ -1,0 +1,40 @@
+-- Confirmed live 2026-09-01: three separate `analytics` rows (ids 555, 559,
+-- 579) shared the exact same artifact_id ("8e8f46ab-a4fe-4166-8ff5-
+-- 2ae420d4a80c"), created ~19-33 minutes apart -- one per job-tiagg-
+-- orchestrator run. register_analytic() has always been a blind INSERT
+-- with no idempotency check, and artifact_id (pg_detection_strategies.sql)
+-- has never had a uniqueness constraint. The most likely mechanism: a
+-- candidate whose detection got successfully generated and registered, but
+-- whose process_one() call then failed *after* register_analytic() and
+-- *before* outbox.mark_emitted() (same "resumable, not yet marked done"
+-- window the detection_pipeline_attempts.project_id fix (2026-08-20)
+-- closed one level up, for the detections.ai project itself) -- got
+-- reclaimed on the next run and re-registered the same already-generated
+-- detection as a brand new row every time, one per orchestrator cycle
+-- until something else finally stopped the reclaiming.
+--
+-- Partial (artifact_id IS NOT NULL) so the many older/legacy rows with no
+-- artifact_id at all (a genuinely unknown id, not a duplicate) aren't
+-- affected -- Postgres unique indexes already treat multiple NULLs as
+-- non-conflicting, but empty string is a distinct non-NULL value some
+-- callers may have passed historically, so it's excluded explicitly too.
+--
+-- CREATE UNIQUE INDEX fails outright if duplicate artifact_ids already
+-- exist -- run this first and resolve any hits before applying this file:
+--
+--   SELECT artifact_id, array_agg(id ORDER BY id) AS analytic_ids, count(*)
+--   FROM analytics
+--   WHERE artifact_id IS NOT NULL AND artifact_id != ''
+--   GROUP BY artifact_id
+--   HAVING count(*) > 1;
+--
+-- This migration deliberately does NOT delete/consolidate existing
+-- duplicate rows itself -- analytics is an append-only audit-style table
+-- referenced by tuning_suggestion_actions.analytic_id (RESTRICT, no
+-- cascade) and possibly other tables added since, so a blind DELETE here
+-- risks losing real audit history or violating a foreign key with no
+-- visibility into who else already refers to the row being removed. Decide
+-- deliberately, per duplicate group, before this index can go in.
+CREATE UNIQUE INDEX IF NOT EXISTS uq_analytics_artifact_id
+    ON analytics (artifact_id)
+    WHERE artifact_id IS NOT NULL AND artifact_id != '';

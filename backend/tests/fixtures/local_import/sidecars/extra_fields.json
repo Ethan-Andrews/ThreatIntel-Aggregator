@@ -1,0 +1,6 @@
+{
+    "file": "valid_content.kql",
+    "title": "Sidecar with unexpected extra fields",
+    "some_unexpected_field": "should cause validation to reject this whole sidecar",
+    "another_bogus_key": 12345
+}

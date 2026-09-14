@@ -1,0 +1,8 @@
+// Title: Suspicious LSASS Access
+/* Description: Detects processes accessing LSASS memory, a common
+   credential-dumping technique (T1003.001). */
+// MITRE ATT&CK: T1003.001 - OS Credential Dumping: LSASS Memory
+DeviceProcessEvents
+| where ProcessCommandLine has_any ("procdump", "lsass.dmp")
+/* Second block comment mid-body, immediately followed by more query */
+| project DeviceName, Timestamp, ProcessCommandLine

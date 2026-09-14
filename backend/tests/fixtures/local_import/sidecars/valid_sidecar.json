@@ -1,0 +1,6 @@
+{
+    "file": "valid_content.kql",
+    "title": "Certutil Decode Abuse",
+    "description": "Detects certutil being used to decode a base64-encoded payload, a common LOLBin technique.",
+    "technique_id": "T1140"
+}

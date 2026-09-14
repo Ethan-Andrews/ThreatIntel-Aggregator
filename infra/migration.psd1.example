@@ -1,0 +1,55 @@
+@{
+    # Core decisions - provision.ps1 prompts for any left empty and saves answers back.
+    AppPrefix     = 'myapp'
+    ResourceGroup = 'my-resource-group'
+    Location      = 'centralus'
+
+    Platform = @{
+        # v1 constraint: must equal ResourceGroup above.
+        ResourceGroup = 'my-resource-group'
+        Prefix        = 'myplat'
+        LogAnalytics  = @{
+            UseExisting   = $true
+            Name          = ''   # prompted if UseExisting and empty
+            ResourceGroup = ''   # defaults to Platform.ResourceGroup
+        }
+    }
+
+    # One entry per container app, in the SAME ORDER as the module calls in apps.bicep
+    # (identityIds[i] in apps.bicep corresponds to Apps[i] here).
+    Apps = @(
+        @{
+            Name        = 'ca-myapp-ui'
+            Image       = 'myapp-ui:latest'                 # tag inside the shared ACR
+            Source      = 'ghcr.io/org/myapp-ui:latest'     # import source; '' = already in ACR
+            SourceAuth  = $false                            # $true = prompt for registry user/PAT
+            External    = $true
+            TargetPort  = 3000
+            EasyAuth    = $true
+            SecretEnv   = @{}                               # env var name -> KV secret name
+            VolumeShare = ''
+        }
+        @{
+            Name        = 'ca-myapp-api'
+            Image       = 'myapp-api:latest'
+            Source      = 'ghcr.io/org/myapp-api:latest'
+            SourceAuth  = $false
+            External    = $false
+            TargetPort  = 8000
+            EasyAuth    = $false
+            SecretEnv   = @{ API_KEY = 'api-key' }
+            VolumeShare = 'myapp-data'
+        }
+    )
+
+    # Used when any app has EasyAuth = $true
+    AppRegistrationName = 'myapp-auth'
+
+    # Optional: the detections.ai pipeline orchestrator, deployed as a
+    # scheduled Container Apps Job. Omit this whole block to skip it.
+    # Orchestrator = @{
+    #     Enabled             = $true
+    #     SentinelWorkspaceId = ''            # Log Analytics workspace customer id (GUID); blank skips Sentinel-backed backtesting
+    #     Schedule            = '*/30 * * * *' # cron, UTC
+    # }
+}
